@@ -1,5 +1,7 @@
 # hello-mcp
 
+[![smithery badge](https://smithery.ai/badge/michael-johnson/hello-mcp)](https://smithery.ai/servers/michael-johnson/hello-mcp)
+
 A deliberately tiny, risk-free MCP server for learning how MCP directory listings work.
 
 Repository: https://github.com/mikej345/hello-mcp
