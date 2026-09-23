@@ -14,8 +14,11 @@ Run locally:
 import os
 import random
 from datetime import datetime, timezone
+from typing import Annotated
 
 from mcp.server.fastmcp import FastMCP
+from mcp.types import ToolAnnotations
+from pydantic import Field
 
 RULES_OF_THUMB = [
     "Measure twice, cut once.",
@@ -41,24 +44,26 @@ mcp = FastMCP(
 )
 
 
-@mcp.tool()
+# All three tools are read-only, have no side effects, and never leave this server.
+SAFE_READ_ONLY = dict(readOnlyHint=True, destructiveHint=False, openWorldHint=False)
+
+
+@mcp.tool(annotations=ToolAnnotations(title="Get a rule of thumb", idempotentHint=False, **SAFE_READ_ONLY))
 def get_rule_of_thumb() -> str:
     """Return one random engineering rule of thumb. Takes no input and has no side effects."""
     return random.choice(RULES_OF_THUMB)
 
 
-@mcp.tool()
-def add_numbers(a: float, b: float) -> float:
-    """Add two numbers and return the sum.
-
-    Args:
-        a: The first number.
-        b: The second number.
-    """
+@mcp.tool(annotations=ToolAnnotations(title="Add two numbers", idempotentHint=True, **SAFE_READ_ONLY))
+def add_numbers(
+    a: Annotated[float, Field(description="The first number to add, e.g. 2 or -3.5.")],
+    b: Annotated[float, Field(description="The second number to add, e.g. 3 or 10.25.")],
+) -> float:
+    """Add two numbers and return the sum."""
     return a + b
 
 
-@mcp.tool()
+@mcp.tool(annotations=ToolAnnotations(title="Get server time", idempotentHint=False, **SAFE_READ_ONLY))
 def get_server_time() -> str:
     """Return the server's current time in UTC (ISO 8601). Useful for checking the server is alive."""
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
