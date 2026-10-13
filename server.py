@@ -19,6 +19,8 @@ from typing import Annotated
 from mcp.server.fastmcp import FastMCP
 from mcp.types import ToolAnnotations
 from pydantic import Field
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 RULES_OF_THUMB = [
     "Measure twice, cut once.",
@@ -79,7 +81,7 @@ GLAMA_CLAIM = {
 
 @mcp.custom_route("/.well-known/glama.json", methods=["GET"])
 async def glama_claim(request: Request) -> JSONResponse:
-    return JSONResponse(GLAMA_CLAIM)
+    return JSONResponse(GLAMA_CLAIM)git 
 
 if __name__ == "__main__":
     transport = os.environ.get("MCP_TRANSPORT", "stdio")
