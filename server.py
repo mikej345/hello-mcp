@@ -69,6 +69,18 @@ def get_server_time() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
+# Glama ownership verification (HTTP file method). Served at
+# https://<host>/.well-known/glama.json — only reachable when running over HTTP.
+GLAMA_CLAIM = {
+    "$schema": "https://glama.ai/mcp/schemas/connector.json",
+    "claim": "glama_claim_AaeTdvNH51QYK1cvoc9b1QVHRuBTl_P9",
+}
+
+
+@mcp.custom_route("/.well-known/glama.json", methods=["GET"])
+async def glama_claim(request: Request) -> JSONResponse:
+    return JSONResponse(GLAMA_CLAIM)
+
 if __name__ == "__main__":
     transport = os.environ.get("MCP_TRANSPORT", "stdio")
     mcp.run(transport=transport)
