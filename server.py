@@ -81,7 +81,7 @@ GLAMA_CLAIM = {
 
 @mcp.custom_route("/.well-known/glama.json", methods=["GET"])
 async def glama_claim(request: Request) -> JSONResponse:
-    return JSONResponse(GLAMA_CLAIM)git 
+    return JSONResponse(GLAMA_CLAIM)
 
 if __name__ == "__main__":
     transport = os.environ.get("MCP_TRANSPORT", "stdio")
